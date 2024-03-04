@@ -2,17 +2,48 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import joblib
+import util
 
 ml_model = joblib.load('./xgb_model.joblib')
-st.title('How much Is this car?')
+st.title('How much Is this car? :car: :dollar:')
 
-car_brands = [
-    'Mercedes-Benz', 'INFINITI', 'Chevrolet', 'RAM', 'Honda', 'Rivian', 'BMW',
-    'Dodge', 'Jeep', 'MINI', 'Porsche', 'Audi', 'Lexus', 'Cadillac', 'Jaguar',
-    'Ford', 'Toyota', 'Tesla', 'Volkswagen', 'GMC', 'Land', 'Nissan', 'Maserati',
-    'Kia', 'Lincoln', 'Hummer', 'Acura', 'Bentley', 'Hyundai', 'Alfa', 'Aston',
-    'Pontiac', 'Rolls-Royce', 'Subaru'
-]
+brand_mapping = {
+    "Acura": 0,
+    "Alfa": 1,
+    "Aston": 2,
+    "Audi": 3,
+    "BMW": 4,
+    "Bentley": 5,
+    "Cadillac": 6,
+    "Chevrolet": 7,
+    "Dodge": 8,
+    "Ford": 9,
+    "GMC": 10,
+    "Honda": 11,
+    "Hummer": 12,
+    "Hyundai": 13,
+    "INFINITI": 14,
+    "Jaguar": 15,
+    "Jeep": 16,
+    "Kia": 17,
+    "Land": 18,
+    "Lexus": 19,
+    "Lincoln": 20,
+    "MINI": 21,
+    "Maserati": 22,
+    "Mercedes-Benz": 23,
+    "Nissan": 24,
+    "Pontiac": 25,
+    "Porsche": 26,
+    "RAM": 27,
+    "Rivian": 28,
+    "Rolls-Royce": 29,
+    "Subaru": 30,
+    "Tesla": 31,
+    "Toyota": 32,
+    "Volkswagen": 33
+}
+
 
 def get_input():
     inputs = []
@@ -20,13 +51,15 @@ def get_input():
     input_index = 0
 
     with cols[input_index % 3]:
-        brand = st.number_input('Brand', min_value=0, max_value=100)
-        inputs.append(brand)
+        brand = st.selectbox('Brand', options=list(brand_mapping.keys()))
+        brand_numeric = brand_mapping[brand]
+        inputs.append(brand_numeric)
     input_index += 1
 
     with cols[input_index % 3]:
-        model = st.number_input('Model', min_value=0, max_value=1000)
-        inputs.append(model)
+        model = st.selectbox('Model', options=list(util.model_mapping.keys()))
+        model_numeric = util.model_mapping[model]
+        inputs.append(model_numeric)
     input_index += 1
 
     with cols[input_index % 3]:
@@ -50,8 +83,9 @@ def get_input():
     input_index += 1
 
     with cols[input_index % 3]:
-        transmission = st.number_input('Transmission', min_value=0, max_value=100)
-        inputs.append(transmission)
+        transmission = st.selectbox('Transmission', options=list(util.transmission_mapping.keys()))
+        transmission_numaric = util.transmission_mapping[transmission]
+        inputs.append(transmission_numaric)
     input_index += 1
 
     with cols[input_index % 3]:
@@ -60,28 +94,33 @@ def get_input():
     input_index += 1
 
     with cols[input_index % 3]:
-        exterior_color = st.number_input('Exterior Color', min_value=0, max_value=100)
-        inputs.append(exterior_color)
+        exterior_color = st.selectbox('Exterior Color', options=list(util.exterior_color.keys()))
+        exterior_color_numeric = util.exterior_color[exterior_color]
+        inputs.append(exterior_color_numeric)
     input_index += 1
 
     with cols[input_index % 3]:
-        interior_color = st.number_input('Interior Color', min_value=0, max_value=100)
-        inputs.append(interior_color)
+        interior_color = st.selectbox('Interior Color', options=list(util.interior_color_mapping.keys()))
+        interior_color_numeric = util.interior_color_mapping[interior_color]
+        inputs.append(interior_color_numeric)
     input_index += 1
 
     with cols[input_index % 3]:
-        accident = st.number_input('Accident', min_value=0, max_value=1)
-        inputs.append(accident)
+        accident = st.selectbox('Accident', options=list(util.accident_mapping.keys()))
+        accident_numeric = util.accident_mapping[accident]
+        inputs.append(accident_numeric)
     input_index += 1
 
     with cols[input_index % 3]:
-        clean_title = st.number_input('Clean Title', min_value=0, max_value=1)
-        inputs.append(clean_title)
+        clean_title = st.selectbox('Clean Title', options=list(util.clean_tile_mapping.keys()))
+        clean_title_numeric = util.clean_tile_mapping[clean_title]
+        inputs.append(clean_title_numeric)
     input_index += 1
 
     with cols[input_index % 3]:
-        cylinder = st.number_input('Cylinder', min_value=0)
-        inputs.append(cylinder)
+        cylinder = st.selectbox('Cylinder', options=list(util.cylinder_mapping.keys()))
+        cylinder_numeric = util.cylinder_mapping[cylinder]
+        inputs.append(cylinder_numeric)
     input_index += 1
 
     with cols[input_index % 3]:
@@ -95,13 +134,15 @@ def get_input():
     input_index += 1
 
     with cols[input_index % 3]:
-        hp = st.number_input('HP', min_value=0)
-        inputs.append(hp)
+        hp = st.selectbox('HP', options=list(util.hp_mapping.keys()))
+        hp_numeric = util.hp_mapping[hp]
+        inputs.append(hp_numeric)
     input_index += 1
 
     with cols[input_index % 3]:
-        v = st.number_input('V', min_value=0)
-        inputs.append(v)
+        v = st.selectbox('V', options=list(util.v_mapping.keys()))
+        v_numeric = util.v_mapping[v]
+        inputs.append(v_numeric)
     input_index += 1
 
     with cols[input_index % 3]:
@@ -111,66 +152,67 @@ def get_input():
     input_index += 1
 
     with cols[input_index % 3]:
-        tfsi = st.number_input('TFSI', min_value=0, max_value=1)
-        inputs.append(tfsi)
+        tfsi = st.checkbox('TFSI')
+        inputs.append(1 if tfsi else 0)
     input_index += 1
 
     with cols[input_index % 3]:
-        gdi = st.number_input('GDI', min_value=0, max_value=1)
-        inputs.append(gdi)
+        gdi = st.checkbox('GDI')
+        inputs.append(1 if gdi else 0)
     input_index += 1
 
     with cols[input_index % 3]:
-        sohc = st.number_input('SOHC', min_value=0, max_value=1)
-        inputs.append(sohc)
+        sohc = st.checkbox('SOHC')
+        inputs.append(1 if sohc else 0)
     input_index += 1
 
     with cols[input_index % 3]:
-        dohc = st.number_input('DOHC', min_value=0, max_value=1)
-        inputs.append(dohc)
+        dohc = st.checkbox('DOHC')
+        inputs.append(1 if dohc else 0)
     input_index += 1
 
     with cols[input_index % 3]:
-        straight = st.number_input('Straight', min_value=0, max_value=1)
-        inputs.append(straight)
+        straight = st.checkbox('Straight')
+        inputs.append(1 if straight else 0)
     input_index += 1
 
     with cols[input_index % 3]:
-        a_t = st.number_input('A/T', min_value=0, max_value=1)
-        inputs.append(a_t)
+        a_t = st.checkbox('A/T')
+        inputs.append(1 if a_t else 0)
     input_index += 1
 
     with cols[input_index % 3]:
-        automatic = st.number_input('Automatic', min_value=0, max_value=1)
-        inputs.append(automatic)
+        automatic = st.checkbox('Automatic')
+        inputs.append(1 if automatic else 0)
     input_index += 1
 
     with cols[input_index % 3]:
-        auto_shift = st.number_input('Auto-Shift', min_value=0, max_value=1)
-        inputs.append(auto_shift)
+        auto_shift = st.checkbox('Auto-Shift')
+        inputs.append(1 if auto_shift else 0)
     input_index += 1
 
     with cols[input_index % 3]:
-        dual_shift_mode = st.number_input('Dual Shift Mode', min_value=0, max_value=1)
-        inputs.append(dual_shift_mode)
+        dual_shift_mode = st.checkbox('Dual Shift Mode')
+        inputs.append(1 if dual_shift_mode else 0)
     input_index += 1
 
     with cols[input_index % 3]:
-        cvt = st.number_input('CVT', min_value=0, max_value=1)
-        inputs.append(cvt)
+        cvt = st.checkbox('CVT')
+        inputs.append(1 if cvt else 0)
     input_index += 1
 
     with cols[input_index % 3]:
-        overdrive = st.number_input('Overdrive', min_value=0, max_value=1)
-        inputs.append(overdrive)
+        overdrive = st.checkbox('Overdrive')
+        inputs.append(1 if overdrive else 0)
     input_index += 1
 
     with cols[input_index % 3]:
-        m_t = st.number_input('M/T', min_value=0, max_value=1)
-        inputs.append(m_t)
+        m_t = st.checkbox('M/T')
+        inputs.append(1 if m_t else 0)
     input_index += 1
 
     return np.array(inputs).reshape(1, -1)
+
 
 def main():
     user_inputs = get_input()
@@ -178,7 +220,10 @@ def main():
 
     # Display prediction highlighted
     st.write("")
-    st.markdown("<h3 style='text-align: center; background-color: lightgreen;'>Predicted Price: " + str(prediction) +"</h3>", unsafe_allow_html=True)
+    st.markdown(
+        "<h3 style='text-align: center; background-color: #ff4b4b;'>Predicted Price: " + str(prediction) + "</h3>",
+        unsafe_allow_html=True)
+
 
 if __name__ == '__main__':
     main()
